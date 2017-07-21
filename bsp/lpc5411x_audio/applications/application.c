@@ -31,17 +31,17 @@ extern int demo_init(void);
 
 void rt_init_thread_entry(void* parameter)
 {
-	  rt_thread_delay(2);
+    rt_thread_delay(2);
 	
-	  msd_init("sd0", "spi10");
+    msd_init("sd0", "spi10");
 	
     /* Filesystem Initialization */
 #if defined(RT_USING_DFS) && defined(RT_USING_DFS_ELMFAT)
-	  /* initialize the device file system */
-	  dfs_init();
+    /* initialize the device file system */
+    dfs_init();
 
-	  /* initialize the elm chan FatFS file system*/
-	  elm_init();
+    /* initialize the elm chan FatFS file system*/
+    elm_init();
     
     /* mount sd card fat partition 1 as root directory */
     if (dfs_mount("sd0", "/", "elm", 0, 0) == 0) {
@@ -62,7 +62,7 @@ void rt_init_thread_entry(void* parameter)
 	/* initialization finsh shell Component */
     finsh_system_init();
 
-		demo_init();
+    demo_init();
 }
 
 int rt_application_init()

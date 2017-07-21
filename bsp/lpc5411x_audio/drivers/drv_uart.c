@@ -236,8 +236,8 @@ void rt_hw_uart_init(void)
 		/* Controls the clock for the Fractional Rate Generator used with the USARTs P57*/
 // Magicoe		LPC_ASYNC_SYSCON->ASYNCAPBCLKCTRLSET = (1 << 0x0F);		/* Enable clock to Fractional divider */
 		
-	  /* Setup UART */
-	  LPC_ASSERT(Chip_UART_Init( uart->UART  ) == 0, __FILE__, __LINE__);		
+    /* Setup UART */
+    LPC_ASSERT(Chip_UART_Init( uart->UART  ) == 0, __FILE__, __LINE__);		
 
     /* preemption = 1, sub-priority = 1 */
     NVIC_SetPriority(uart->UART_IRQn, ((0x01 << 3) | 0x01));

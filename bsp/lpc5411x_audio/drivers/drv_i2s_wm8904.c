@@ -169,14 +169,14 @@ I2S3_SD     PB5
 */
 static void codec_gpio_config(void) //GPIO_Configuration(void)
 {
-		rt_kprintf("codec_gpio_config\r\n");
+    rt_kprintf("codec_gpio_config\r\n");
     Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 5, IOCON_FUNC1 | IOCON_DIGITAL_EN);								//	Flexcomm 6 / SDA
     Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 6, IOCON_FUNC1 | IOCON_DIGITAL_EN);								//	Flexcomm 6 / WS
     Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 7, IOCON_FUNC1 | IOCON_DIGITAL_EN);								//	Flexcomm 6 / SCK
 
-    Chip_IOCON_PinMuxSet(LPC_IOCON, 1, 6, IOCON_FUNC2 | IOCON_DIGITAL_EN);								//	Flexcomm 7 / SCK
-    Chip_IOCON_PinMuxSet(LPC_IOCON, 1, 7, IOCON_FUNC2 | IOCON_DIGITAL_EN);								//	Flexcomm 7 / SDA
-    Chip_IOCON_PinMuxSet(LPC_IOCON, 1, 8, IOCON_FUNC2 | IOCON_DIGITAL_EN);								//	Flexcomm 7 / WS
+    Chip_IOCON_PinMuxSet(LPC_IOCON, 1, 12, IOCON_FUNC4 | IOCON_DIGITAL_EN);								//	Flexcomm 7 / SCK
+    Chip_IOCON_PinMuxSet(LPC_IOCON, 1, 13, IOCON_FUNC4 | IOCON_DIGITAL_EN);								//	Flexcomm 7 / SDA
+    Chip_IOCON_PinMuxSet(LPC_IOCON, 1, 14, IOCON_FUNC4 | IOCON_DIGITAL_EN);								//	Flexcomm 7 / WS
 }
 
 static void codec_dma_config(rt_uint32_t addr, rt_size_t size)
@@ -186,7 +186,7 @@ static void codec_dma_config(rt_uint32_t addr, rt_size_t size)
 
 static void code_i2s_config(rt_uint32_t audiofreq)
 {
-		rt_kprintf("i2s config\r\n");
+    rt_kprintf("i2s config\r\n");
     Chip_I2S_Init(I2S_PORT_TX, &audio_fmt_tx);									//	initialize I2S port
     Chip_Clock_SetFLEXCOMMClockSource(I2S7_FLEXCOMM, SYSCON_FLEXCOMMCLKSELSRC_PLL);
     Chip_I2S_Config(I2S_PORT_TX, &audio_fmt_tx);								//	configure I2S port
@@ -202,7 +202,7 @@ static void code_i2s_config(rt_uint32_t audiofreq)
     Chip_I2S_FIFO_Config(I2S_PORT_RX, &audio_fmt_rx);							//	configure I2S FIFO
     Chip_I2S_FIFO_Control(I2S_PORT_RX, &audio_fmt_rx, I2S_FIFO_ENABLE);			//	enable FIFO
 
-	  Chip_I2S_FIFO_SetInterrupt(I2S_PORT_TX, I2S_FIFO_INT_TXERR | I2S_FIFO_INT_TXLVL);	//	enable tx interrupts
+    Chip_I2S_FIFO_SetInterrupt(I2S_PORT_TX, I2S_FIFO_INT_TXERR | I2S_FIFO_INT_TXLVL);	//	enable tx interrupts
     Chip_I2S_FIFO_SetInterrupt(I2S_PORT_RX, I2S_FIFO_INT_RXERR | I2S_FIFO_INT_RXLVL);	//	enable rx interrupts
 }
 
@@ -213,7 +213,7 @@ static void codec_send(rt_uint8_t cmd, rt_uint16_t s_data)
 
     RT_ASSERT(codec.i2c_device != RT_NULL);
 
-		send_buffer[0] = (rt_uint8_t)(cmd);
+    send_buffer[0] = (rt_uint8_t)(cmd);
     send_buffer[1] = (rt_uint8_t)(s_data>>8);
     send_buffer[2] = (rt_uint8_t)(s_data);
 
@@ -344,21 +344,20 @@ static void wm8904_multi_reg_write(const REG_CONFIG_T* seq, uint32_t cnt)
 
 static rt_err_t codec_init(rt_device_t dev)
 {
-		rt_uint32_t i;
-	  rt_kprintf("codec_init\r\n");
-
+    rt_uint32_t i;
+    rt_kprintf("codec_init\r\n");
 
     return RT_EOK;
 }
 
 void vol(uint16_t v) // 0~99
 {
-	wm8904_hp_vol(v);
+    wm8904_hp_vol(v);
 }
 
 rt_err_t sample_rate(int sr)
 {
-		wm8904_setSampleRate(sr);
+    wm8904_setSampleRate(sr);
     return RT_EOK;
 }
 
@@ -741,18 +740,18 @@ ErrorCode_t wm8904_setSampleRate(uint32_t rate)
 rt_err_t codec_hw_init(const char * i2c_bus_device_name)
 {
     struct rt_i2c_bus_device * i2c_device;
-		uint32_t ret;
-	
-		Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 21, (IOCON_FUNC1 | IOCON_MODE_INACT | IOCON_DIGITAL_EN));
-		Chip_Clock_SetCLKOUTSource(SYSCON_CLKOUTSRC_MAINCLK, 1);
+    uint32_t ret;
+    
+    Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 21, (IOCON_FUNC1 | IOCON_MODE_INACT | IOCON_DIGITAL_EN));
+    Chip_Clock_SetCLKOUTSource(SYSCON_CLKOUTSRC_MAINCLK, 1);
 		 
-		rt_kprintf("read file page\r\n");		
-		ret = Chip_Clock_GetMainClockRate();
-		rt_kprintf("MainClk %d  ", ret);
-		ret = Chip_Clock_GetSystemClockRate();
-		rt_kprintf("SysClk %d  \r\n", ret);
+    rt_kprintf("read file page\r\n");		
+    ret = Chip_Clock_GetMainClockRate();
+    rt_kprintf("MainClk %d  ", ret);
+    ret = Chip_Clock_GetSystemClockRate();
+    rt_kprintf("SysClk %d  \r\n", ret);
 	
-		rt_kprintf("codec_hw_init_begin\r\n");
+    rt_kprintf("codec_hw_init_begin\r\n");
     i2c_device = rt_i2c_bus_device_find(i2c_bus_device_name);
     if(i2c_device == RT_NULL)
     {
@@ -761,50 +760,54 @@ rt_err_t codec_hw_init(const char * i2c_bus_device_name)
     }
     codec.i2c_device = i2c_device;
 				
-		/* Stop auto trimming of the FRO from USB */
-		//Chip_USB_TrimOff(0);
+    /* Stop auto trimming of the FRO from USB */
+    //Chip_USB_TrimOff(0);
 #if Magicoe
-		LPC_SYSCON->FROCTRL = LPC_SYSCON->FROCTRL & ~(SYSCON_FROCTRL_MASK | SYSCON_FROCTRL_USBCLKADJ);		
-		Chip_Clock_SetMainClockSource(SYSCON_MAINCLKSRC_FRO12MHZ);
-		Chip_Clock_SetSystemPLLSource(SYSCON_PLLCLKSRC_FRO12MHZ);
-		Chip_Clock_SetPLLFreq(&pll_setup_48KHz);
-		//Chip_Clock_SetPLLFreq(&pllSetup);
-		Chip_Clock_SetMainClockSource(SYSCON_MAINCLKSRC_PLLOUT);
+    LPC_SYSCON->FROCTRL = LPC_SYSCON->FROCTRL & ~(SYSCON_FROCTRL_MASK | SYSCON_FROCTRL_USBCLKADJ);		
+    Chip_Clock_SetMainClockSource(SYSCON_MAINCLKSRC_FRO12MHZ);
+    Chip_Clock_SetSystemPLLSource(SYSCON_PLLCLKSRC_FRO12MHZ);
+    Chip_Clock_SetPLLFreq(&pll_setup_48KHz);
+    //Chip_Clock_SetPLLFreq(&pllSetup);
+    Chip_Clock_SetMainClockSource(SYSCON_MAINCLKSRC_PLLOUT);
+
+    Chip_IOCON_PinMuxSet(LPC_IOCON, 1, 17, (IOCON_FUNC4 | IOCON_MODE_INACT | IOCON_DIGITAL_EN));
+    Chip_Clock_SetMCLKDirOutput();
+    Chip_Clock_SetMCLKClockSource(SYSCON_MCLKSRC_PLL, 2);
 		
-		Chip_IOCON_PinMuxSet(LPC_IOCON, 1, 17, (IOCON_FUNC4 | IOCON_MODE_INACT | IOCON_DIGITAL_EN));
-		Chip_Clock_SetMCLKDirOutput();
-		Chip_Clock_SetMCLKClockSource(SYSCON_MCLKSRC_PLL, 2);
-		
-		Chip_SYSCON_SetFLASHAccess(SYSCON_FLASH_3CYCLE);
+    Chip_SYSCON_SetFLASHAccess(SYSCON_FLASH_3CYCLE);
 #else
-		Chip_IOCON_PinMuxSet(LPC_IOCON, 1, 17, (IOCON_FUNC4 | IOCON_MODE_INACT | IOCON_DIGITAL_EN));
-		Chip_Clock_SetMCLKDirOutput();
-		Chip_Clock_SetMCLKClockSource(SYSCON_MCLKSRC_PLL, (1*LPC54110_IIS_MUL));
+    Chip_IOCON_PinMuxSet(LPC_IOCON, 1, 17, (IOCON_FUNC4 | IOCON_MODE_INACT | IOCON_DIGITAL_EN));
+    Chip_Clock_SetMCLKDirOutput();
+    Chip_Clock_SetMCLKClockSource(SYSCON_MCLKSRC_PLL, (1*LPC54110_IIS_MUL));
 #endif
 
-		rt_kprintf("read file page\r\n");		
-		ret = Chip_Clock_GetMainClockRate();
-		rt_kprintf("MainClk %d  ", ret);
-		ret = Chip_Clock_GetSystemClockRate();
-		rt_kprintf("SysClk %d  \r\n", ret);
+    rt_kprintf("read file page\r\n");		
+    ret = Chip_Clock_GetMainClockRate();
+    rt_kprintf("MainClk %d  ", ret);
+    ret = Chip_Clock_GetSystemClockRate();
+    rt_kprintf("SysClk %d  \r\n", ret);
 // Initial I2C here maybe
 		
-		Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 5, IOCON_FUNC1 | IOCON_DIGITAL_EN);						//	Flexcomm 6 / SDA
-		Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 6, IOCON_FUNC1 | IOCON_DIGITAL_EN);						//	Flexcomm 6 / WS
-		Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 7, IOCON_FUNC1 | IOCON_DIGITAL_EN);						//	Flexcomm 6 / SCK
+    Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 5, IOCON_FUNC1 | IOCON_DIGITAL_EN);						//	Flexcomm 6 / SDA
+    Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 6, IOCON_FUNC1 | IOCON_DIGITAL_EN);						//	Flexcomm 6 / WS
+    Chip_IOCON_PinMuxSet(LPC_IOCON, 0, 7, IOCON_FUNC1 | IOCON_DIGITAL_EN);						//	Flexcomm 6 / SCK
 
-		Chip_IOCON_PinMuxSet(LPC_IOCON, 1, 6, IOCON_FUNC2 | IOCON_DIGITAL_EN);						//	Flexcomm 7 / SCK
-		Chip_IOCON_PinMuxSet(LPC_IOCON, 1, 7, IOCON_FUNC2 | IOCON_DIGITAL_EN);						//	Flexcomm 7 / SDA
-		Chip_IOCON_PinMuxSet(LPC_IOCON, 1, 8, IOCON_FUNC2 | IOCON_DIGITAL_EN);						//	Flexcomm 7 / WS
+    Chip_IOCON_PinMuxSet(LPC_IOCON, 1, 12, IOCON_FUNC4 | IOCON_DIGITAL_EN);						//	Flexcomm 7 / SCK
+    Chip_IOCON_PinMuxSet(LPC_IOCON, 1, 13, IOCON_FUNC4 | IOCON_DIGITAL_EN);						//	Flexcomm 7 / SDA
+    Chip_IOCON_PinMuxSet(LPC_IOCON, 1, 14, IOCON_FUNC4 | IOCON_DIGITAL_EN);						//	Flexcomm 7 / WS
 		
-		Chip_I2S_Init(I2S_PORT_TX, &audio_fmt_tx);																				//	initialize I2S port
-		
-		Chip_Clock_SetFLEXCOMMClockSource(I2S7_FLEXCOMM, SYSCON_FLEXCOMMCLKSELSRC_PLL);
-		Chip_I2S_Config(I2S_PORT_TX, &audio_fmt_tx);																			//	configure I2S port
+	/* MCLK output for I2S */
+	Chip_IOCON_PinMuxSet(LPC_IOCON, 1, 17, IOCON_FUNC4 | IOCON_MODE_INACT | IOCON_DIGITAL_EN);
+	LPC_SYSCON->MCLKIO = 1U;
+    
+    Chip_I2S_Init(I2S_PORT_TX, &audio_fmt_tx);																				//	initialize I2S port
 
-		Chip_I2S_FIFO_Config (I2S_PORT_TX, &audio_fmt_tx);																//	configure I2S FIFO
-		Chip_I2S_FIFO_Control(I2S_PORT_TX, &audio_fmt_tx, I2S_FIFO_TXZ_ENABLE);						//	send zeros if no data is available
-		Chip_I2S_FIFO_Control(I2S_PORT_TX, &audio_fmt_tx, I2S_FIFO_ENABLE);								//	enable FIFO	
+    Chip_Clock_SetFLEXCOMMClockSource(I2S7_FLEXCOMM, SYSCON_FLEXCOMMCLKSELSRC_PLL);
+    Chip_I2S_Config(I2S_PORT_TX, &audio_fmt_tx);																			//	configure I2S port
+
+    Chip_I2S_FIFO_Config (I2S_PORT_TX, &audio_fmt_tx);																//	configure I2S FIFO
+    Chip_I2S_FIFO_Control(I2S_PORT_TX, &audio_fmt_tx, I2S_FIFO_TXZ_ENABLE);						//	send zeros if no data is available
+    Chip_I2S_FIFO_Control(I2S_PORT_TX, &audio_fmt_tx, I2S_FIFO_ENABLE);								//	enable FIFO	
 		
 //		Chip_I2S_Init(I2S_PORT_RX, &audio_fmt_rx);																				//	initialize I2S port
 //		Chip_Clock_SetFLEXCOMMClockSource(I2S6_FLEXCOMM, SYSCON_FLEXCOMMCLKSELSRC_PLL);
@@ -813,16 +816,16 @@ rt_err_t codec_hw_init(const char * i2c_bus_device_name)
 //		Chip_I2S_FIFO_Config(I2S_PORT_RX, &audio_fmt_rx);																	//	configure I2S FIFO
 //		Chip_I2S_FIFO_Control(I2S_PORT_RX, &audio_fmt_rx, I2S_FIFO_ENABLE);								//	enable FIFO
 		
-		Chip_I2S_FIFO_SetInterrupt(I2S_PORT_TX, I2S_FIFO_INT_TXERR | I2S_FIFO_INT_TXLVL);	//	enable tx interrupts
+    Chip_I2S_FIFO_SetInterrupt(I2S_PORT_TX, I2S_FIFO_INT_TXERR | I2S_FIFO_INT_TXLVL);	//	enable tx interrupts
 //		Chip_I2S_FIFO_SetInterrupt(I2S_PORT_RX, I2S_FIFO_INT_RXERR | I2S_FIFO_INT_RXLVL);	//	enable rx interrupts
 		
-		/* init codec */
-		ret = wm8904_init();
-		if (ret == LPC_OK) {
-			//g_codec.cur_rate = DEF_SAMPLE_RATE;
-			/* suspend codec after init to conserve power */
-			//Codec_Suspend();
-		}
+    /* init codec */
+    ret = wm8904_init();
+    if (ret == LPC_OK) {
+        //g_codec.cur_rate = DEF_SAMPLE_RATE;
+        /* suspend codec after init to conserve power */
+        //Codec_Suspend();
+    }
 	
     codec.parent.type = RT_Device_Class_Sound;
     codec.parent.rx_indicate = RT_NULL;

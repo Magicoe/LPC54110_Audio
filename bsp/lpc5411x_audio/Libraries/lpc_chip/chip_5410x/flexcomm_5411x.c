@@ -80,10 +80,8 @@ int Chip_FLEXCOMM_Init(LPC_FLEXCOMM_T *pFCOMM, FLEXCOMM_PERIPH_T periph)
 
 	if (idx < 0)
 		return idx;
-
 	/* Enable the peripheral clock */
 	Chip_Clock_EnablePeriphClock((CHIP_SYSCON_CLOCK_T) (SYSCON_CLOCK_FLEXCOMM0 + idx));
-
 	/* Reset FlexCOMM */
 	Chip_SYSCON_PeriphReset((CHIP_SYSCON_PERIPH_RESET_T) (RESET_FLEXCOMM0 + idx));
 
@@ -95,10 +93,8 @@ int Chip_FLEXCOMM_Init(LPC_FLEXCOMM_T *pFCOMM, FLEXCOMM_PERIPH_T periph)
 
 	/* By default enable wakeup from this peripheral */
 	Chip_SYSCON_EnableWakeup((CHIP_SYSCON_WAKEUP_T) (SYSCON_STARTER_FLEXCOMM0 + idx));
-
 	/* Set a default source for this flexcomm */
 	Chip_Clock_SetFLEXCOMMClockSource(idx, SYSCON_FLEXCOMMCLKSELSRC_FRO12MHZ);
-
 	return 0;
 }
 

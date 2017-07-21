@@ -59,21 +59,21 @@ void rt_hw_board_init()
     /* Set the Vector Table base location at 0x00000000 */
     SCB->VTOR  = (0x00000000 & NVIC_VTOR_MASK);
 #endif
-		SystemCoreClockUpdate();
+    SystemCoreClockUpdate();
     /* init systick  1 systick = 1/(100M / 100) 100¸ösystick = 1s*/
     SysTick_Config(SystemCoreClock / RT_TICK_PER_SECOND);
     /* set pend exception priority */
     NVIC_SetPriority(PendSV_IRQn, (1 << __NVIC_PRIO_BITS) - 1);
 
     Chip_Clock_EnablePeriphClock(SYSCON_CLOCK_INPUTMUX);
-	  Chip_Clock_EnablePeriphClock(SYSCON_CLOCK_IOCON);
-		Chip_GPIO_Init(LPC_GPIO);
+    Chip_Clock_EnablePeriphClock(SYSCON_CLOCK_IOCON);
+    Chip_GPIO_Init(LPC_GPIO);
 	
     /*init uart device*/
     rt_hw_uart_init();
     rt_console_set_device(RT_CONSOLE_DEVICE_NAME);
 	
-		rt_hw_spi_init();
+    rt_hw_spi_init();
 #if LPC_EXT_SDRAM == 1
     lpc_sdram_hw_init();
     mpu_init();

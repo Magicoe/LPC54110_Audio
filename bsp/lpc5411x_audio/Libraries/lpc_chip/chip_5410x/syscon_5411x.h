@@ -308,7 +308,7 @@ typedef enum {
 	RESET_MRT = 32,                 /*!< Multirate Timer */
 	RESET_SCT0 = 32 + 2,            /*!< State configurable Timer */
 	RESET_SCT = 32 + 2,             /*!< State configurable Timer */
-	RESET_UTICK = 10,               /*!< Micro Tick Timer */
+	RESET_UTICK = 32 + 10,          /*!< Micro Tick Timer */
 	RESET_FLEXCOMM0,                /*!< FlexComm 0 */
 	RESET_FLEXCOMM1,                /*!< FlexComm 1 */
 	RESET_FLEXCOMM2,                /*!< FlexComm 2 */

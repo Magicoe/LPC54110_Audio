@@ -141,13 +141,13 @@ void Chip_Clock_EnablePeriphClock(CHIP_SYSCON_CLOCK_T clk)
 	if (clkEnab >= 128) {
 		clkEnab = clkEnab - 128;
 
-		LPC_ASYNC_SYSCON->ASYNCAPBCLKCTRLSET = (1 << clkEnab);
+		LPC_ASYNC_SYSCON->ASYNCAPBCLKCTRLSET |= (1 << clkEnab);
 	}
 	else if (clkEnab >= 32) {
-		LPC_SYSCON->AHBCLKCTRLSET[1] = (1 << (clkEnab - 32));
+		LPC_SYSCON->AHBCLKCTRLSET[1] |= (1 << (clkEnab - 32));
 	}
 	else {
-		LPC_SYSCON->AHBCLKCTRLSET[0] = (1 << clkEnab);
+		LPC_SYSCON->AHBCLKCTRLSET[0] |= (1 << clkEnab);
 	}
 }
 
